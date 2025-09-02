@@ -1,0 +1,2 @@
+we added q widgets and promoted them inside of designer in the two areas. 
+made code to make it run

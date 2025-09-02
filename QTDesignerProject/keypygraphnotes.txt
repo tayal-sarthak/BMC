@@ -1,0 +1,68 @@
+IF YOUR EVER CONFUSED ON HOW TO USE AN IMAGE IN PYQT , REFERENCE BOBBY.PY , AS IT INCLUDES A NORMAL PICTURE FRAME. HSV_SLIDER_GUI ALSO DOES IT, BUT WHILE EDITIJNG THINGS THAT
+ARE NOT DIRECTLY NECESSARY TO THE CODE!!!!!!! 
+!
+!
+!
+!
+
+interpret image data in row major instead of column major(defualt)
+app run - 
+pg.mkQApp()
+figure out this - win = pg.GraphicsLayoutWidget()
+title - win.setWindowTitle
+
+
+# A plot area (ViewBox + axes) for displaying the image
+p1 = win.addPlot(title="") <- empty plot to display image. this is how you make the backdrop to make it work 
+
+# Item for displaying image data
+img = pg.ImageItem() <--- reference app startup with imageitem()
+p1.addItem(img)
+
+
+states the box outline ----
+roi = pg.ROI([-8, 14], [6, 5])
+roi.addScaleHandle([0.5, 1], [0.5, 0.5])
+roi.addScaleHandle([0, 0.5], [0.5, 0.5]
+p1.addItem(roi)
+roi.setZValue(10) 
+-------
+draw green line on historgram -- isocurve
+iso = pg.IsocurveItem(level=0.8, pen='g')
+iso.setParentItem(img)
+iso.setZValue(5)
+
+color control
+hist = pg.HistogramLUTItem()
+hist.setImageItem(img)
+win.addItem(hist)
+
+set isocurve lewvel (adjust the green line)
+isoLine = pg.InfiniteLine(angle=0, movable=True, pen='g')
+hist.vb.addItem(isoLine)
+hist.vb.setMouseEnabled(y=False) # makes user interaction a little easier
+isoLine.setValue(0.8)
+isoLine.setZValue(1000) # bring iso line above contrast controls
+
+bottom plot with the data
+win.nextRow()
+p2 = win.addPlot(colspan=2)
+p2.setMaximumHeight(250)
+win.resize(800, 800)
+win.show()
+
+image data
+data = np.random.normal(size=(200, 100))
+data[20:80, 20:80] += 2.
+data = pg.gaussianFilter(data, (3, 3))
+data += np.random.normal(size=(200, 100)) * 0.1
+img.setImage(data)
+hist.setLevels(data.min(), data.max())
+
+key!! isocurve w/ smoothed data; requires gaussianFilter!!!!
+iso.setData(pg.gaussianFilter(data, (2, 2)))
+
+
+change image is  (not linkeed to plot or im age data rather for scaliability)
+
+
